@@ -29,6 +29,10 @@ namespace KoraOnlineAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(c =>
+            {
+                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
+            });
             services.AddDbContext<KoraOnline>(op => op.UseSqlServer(Configuration.GetConnectionString("Database")));
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -46,6 +50,7 @@ namespace KoraOnlineAPI
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "KoraOnlineAPI v1"));
             }
+            app.UseCors(options => options.AllowAnyOrigin());
 
             app.UseHttpsRedirection();
 
